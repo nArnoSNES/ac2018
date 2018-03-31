@@ -22,11 +22,12 @@ extern unsigned short pad; // to receive status of 1P joypad
 void printScore(void) {
 
 	consoleInitText(0, 0, &snesfont);
-	consoleSetShadowCol(0,RGB15(16,16,16));
+        consoleSetTextCol(RGB15(11,20,13),RGB15(0,0,0));
+        consoleSetShadowCol(1 ,RGB15(6,10,6));
 
 	setMode(BG_MODE1,0);  bgSetDisable(1);  bgSetDisable(2);
 
-	consoleDrawText(12,10,"score !");
+	consoleDrawText(12,10,"Game Over");
 
 
 	delay = 0;

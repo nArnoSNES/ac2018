@@ -33,3 +33,19 @@ sprites_pal:
 sprites_pal_end:
 
 .ends
+
+.section ".rodata3" superfree
+
+title_pic:
+.incbin "title.pic"
+title_pic_end:
+
+title_pal:
+.incbin "title.pal"
+title_pal_end:
+
+title_map:
+.incbin "title.map"
+title_map_end:
+
+.ends

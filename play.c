@@ -41,7 +41,7 @@ typedef struct
 Player player;
 
 // Sprite State values
-enum PlayerSprite {WALK0 = 0, WALK1 = 4, WALK2 = 8, WALK3 = 12, JUMP0 = 64, JUMP1 = 68, JUMP2 = 72, BONK0 = 76, BONK1 = 128};
+enum PlayerSprite {WALK0 = 0, WALK1 = 4, WALK2 = 8, WALK3 = 12, JUMP0 = 64, JUMP1 = 68, JUMP2 = 72, BONK0 = 76, BONK1 = 128, SHOT = 132};
 
 //---- ugly collision detection function ----
 int getCollisionTile(int x, int y) {
@@ -314,7 +314,7 @@ void player_state_6(void)
 		}
 		
 	}
-	if (player.tics > 10)
+	if (player.tics > 20)
 	{
 		/* as this animation ends, restore the sprite to its normal posision and set the state back to 0 */
 		oamSet(0, player.x, player.y, 3, player.direction, 0, BONK0, 0);
@@ -347,18 +347,18 @@ player's State Machine:
 //---------------------------------------------------------------------------------
 void play(void) {
 	
-	player.x =  9*8;
-	player.y = 18*8-1; // The ground! Well, minus 32 pix height
+	player.x =  45;
+	player.y = 100;
 	player.tics = 0;
-    player.frame = 0;
-    player.walkspeed = WALKSPEED;
+        player.frame = 0;
+        player.walkspeed = WALKSPEED;
 
 	bgInitTileSet(1, &bg1_tiles, &bg1_pal, 0, (&bg1_tiles_end - &bg1_tiles), (&bg1_pal_end-&bg1_pal), BG_16COLORS, 0x4000);
-	bgInitMapSet(1, &bg1_map, (&bg1_map_end - &bg1_map),SC_32x32, 0x03000);
+	bgInitMapSet(1, &bg1_map, (&bg1_map_end - &bg1_map),SC_32x32, 0x01000);
 
 	consoleInitText(0, 1, &snesfont);
-	consoleSetTextCol(RGB15(10,10,6),RGB15(0,0,0));
-	consoleSetShadowCol(1 ,RGB15(20,20,16));
+	consoleSetTextCol(RGB15(11,20,13),RGB15(0,0,0));
+	consoleSetShadowCol(1 ,RGB15(6,10,6));
 
 	setMode(BG_MODE1,0);  bgSetDisable(2);
 

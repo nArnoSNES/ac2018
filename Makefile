@@ -86,7 +86,7 @@ sprites.pic: sprites.bmp
 	@echo convert bitmap ... $(notdir $@)
 	$(GFXCONV) -gs32 -pc16 -po16 -n $<
 	
-bitmaps : snesfont.pic bg1.pic coll1.clm sprites.pic
+bitmaps : snesfont.pic bg1.pic coll1.clm sprites.pic title.pic
 
 #---------------------------------------------------------------------------------
 $(OUTPUT).sfc	: $(OFILES)

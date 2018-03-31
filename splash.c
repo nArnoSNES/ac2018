@@ -23,15 +23,17 @@ void splash(void) {
    
 
 	consoleInitText(0, 0, &snesfont);
-	consoleSetShadowCol(0,RGB15(16,16,16));
+        consoleSetTextCol(RGB15(11,20,13),RGB15(0,0,0));
+        consoleSetShadowCol(1 ,RGB15(6,10,6));
 
 	setMode(BG_MODE1,0);  bgSetDisable(1);  bgSetDisable(2);
 
-	consoleDrawText(12,10,"splash !");
+        consoleDrawText(10,11,"  AC 2018  ");
+	consoleDrawText(10,12,"(c)  n Arno");
 
 
     delay = 0;
-	while(delay<400) {
+	while(delay<100) {
 		delay++;
 		WaitForVBlank();
 	}
