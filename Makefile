@@ -58,11 +58,7 @@ all	:	bitmaps $(OUTPUT).sfc
 
 clean:
 	@echo clean ...
-	@rm -f $(OFILES) $(TARGET).sfc $(TARGET).sym *.pic *.pal *.map *.bnk *.brr soundbank.asm soundbank.h *.clm
-
-sfc	:	bitmaps $(OUTPUT).sfc
-	$(SNTOOLS) -hi! $(GTITLE) $(TARGET).sfc
-	@rm -f $(OFILES) $(TARGET).sym *.pic *.pal *.map *.bnk *.brr soundbank.asm soundbank.h *.clm
+	@rm -f $(OFILES) *.sfc *.sym *.pic *.pal *.map *.bnk *.brr soundbank.asm soundbank.h *.clm
 
 #---------------------------------------------------------------------------------
 soundbank.asm : $(AUDIOFILES)
