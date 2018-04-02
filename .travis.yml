@@ -1,0 +1,26 @@
+language: c
+
+sudo: required
+
+before_install:
+  - wget https://github.com/nArnoSNES/snesdtb/releases/download/v1.0-4/snesdtb_1.0-4.deb
+  - wget https://github.com/nArnoSNES/snesdtc/releases/download/v2.3.2/pvsl
+
+install:
+  - sudo dpkg -i snesdtb_1.0-4.deb
+
+before_script:
+  - bash pvsl
+
+script:
+  - make
+
+deploy:
+  provider: releases
+  api-key:
+    - secure: "0btXN+PfLmDG3yf4/KpkbiT5lPItPQ3mrvDCl4kDFlNk/O3mbRYC0w0+uLousO8uJMkXJlFutHopfPK9sgZC1v77rCujDq/f9gjOpox2/7Hq9kHhWd1OBxQYEJT1KaerCW1C84QNR+GkeWiMQpPBmriw83sZGGvXdHoW9STLImmahIewEVbo+xMvM6xa5eoOVhQggnxilgzliYcd6xuBR33uHOz/iW0rsF+aw5+K7D2EK2RBvka4MxAHX7isC5kALep67dd4w6YXnuW7sO56sau1tRqYucL0n+A6nWKH5RsukYFTfY3tDtyLGkXKzt8QavxQy0eich1fgJcMeiJznc+IRCiEFAxEOISCyCEWwn8Bl+joOq2BHzaRHnv6yPe9bhrGWLaUmSylkXfDxddrbuAoj2XHEWoQlrbeWR0uAlHTF440YCrjxA3puUVKZotqu4vG70JGz4Donw4c5/iGDiVsExiEQLlb+onjzUwQyGMjdJzFxTCqrUDtCHSqZ8AsVUU4Va5c98Sw777kx9qcNxQ8EzY6ZpKs1lx/+wt3/pzPCGCfOdZf+lRF2WZOX0maqyLo+KoeQLfOrJTWZWtjLxOYyiN0/+H2hRkc6a15aHS3vsKfAWnryZVjvK7w41gimsYlw/7p+7wl/TDky0sdpuQOG59aR/dPuHJHRR82yho="
+  file_glob: true
+  file: 'ac2018.sfc'
+  skip_cleanup: true
+  on:
+    tags: true
