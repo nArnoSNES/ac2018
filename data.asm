@@ -32,6 +32,18 @@ sprites_pal:
 .incbin "sprites.pal" /* 32 */
 sprites_pal_end:
 
+fog:
+.incbin "fog.pic"
+fog_end:
+
+fog_map:
+.incbin "fog.map"
+fog_map_end:
+
+fog_pal:
+.incbin "fog.pal"
+fog_pal_end:
+
 .ends
 
 .section ".rodata3" superfree

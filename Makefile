@@ -73,7 +73,11 @@ snesfont.pic: snesfont.bmp
 bg1.pic: bg1.bmp
 	@echo convert without rearranging color order ... $(notdir $@)
 	$(GFXCONV) -pc16 -n -gs8 -pe0 -fbmp -m $<
-	
+
+fog.pic: fog.bmp
+	@echo convert fog with blank tile management ... $(notdir $@)
+	$(GFXCONV) -pc16 -n -gs8 -pe0 -fbmp -m -gb $<
+
 coll1.clm: coll1.bmp
 	@echo convert collision map ... $(notdir $@)
 	$(GFXCONV) -gb -pc4 -n -gs8 -mc $<
@@ -82,7 +86,7 @@ sprites.pic: sprites.bmp
 	@echo convert bitmap ... $(notdir $@)
 	$(GFXCONV) -gs32 -pc16 -po16 -n $<
 	
-bitmaps : snesfont.pic bg1.pic coll1.clm sprites.pic title.pic
+bitmaps : snesfont.pic bg1.pic coll1.clm sprites.pic title.pic fog.pic fog.map
 
 #---------------------------------------------------------------------------------
 $(OUTPUT).sfc	: $(OFILES)

@@ -17,6 +17,10 @@ extern char col1_map, col1_map_end;
 extern char sprites, sprites_end;
 extern char sprites_pal, sprites_pal_end;
 
+extern char fog, fog_end;
+extern char fog_map, fog_map_end;
+extern char fog_pal, fog_pal_end;
+
 /*-----------------------------
         All global vars
 ------------------------------*/
@@ -48,6 +52,13 @@ typedef struct
         int speed;
 } Shot;
 Shot shot;
+
+typedef struct
+{
+        unsigned int x, y, panic_up, panic_down;
+        char tics, state, direction, lock;
+} Camera;
+Camera camera;
 
 // Sprite State values (shot is included)
 enum PlayerSprite {WALK0 = 0, WALK1 = 4, WALK2 = 8, WALK3 = 12, JUMP0 = 64, JUMP1 = 68, JUMP2 = 72, BONK0 = 76, BONK1 = 128, SHOT = 132};
@@ -110,6 +121,11 @@ void move_in_world(void)
 {
 	if (player.direction == DIR_LEFT && player.x > 8 && getCollisionTile(player.x-player.walkspeed, player.y) == 0) player.x-=player.walkspeed;
 	if (player.direction == DIR_RIGHT && player.x < 216 && getCollisionTile(player.x+player.walkspeed, player.y) == 0) player.x+=player.walkspeed;
+}
+
+void scroll_fog(void)
+{
+	bgSetScroll(0,256-(player.x-48),256-(player.y-48));	
 }
 
 void player_state_0(void)
@@ -177,6 +193,7 @@ void player_state_1(void)
 		if (player.frame == 3) oamSet(0, player.x, player.y, 3, player.direction, 0, WALK2, 0);
 		if (player.frame == 4) oamSet(0, player.x, player.y, 3, player.direction, 0, WALK1, 0);
 		if (player.frame == 5) oamSet(0, player.x, player.y, 3, player.direction, 0, WALK0, 0);
+                scroll_fog();
 	}
 	if (pad & KEY_LEFT)
 	{
@@ -272,6 +289,7 @@ void player_state_3(void)
 		move_in_world();
 	}
 	oamSet(0, player.x, player.y, 3, player.direction, 0, player.animf, 0);
+        scroll_fog();
 }
 void player_state_4(void)
 {
@@ -300,6 +318,7 @@ void player_state_4(void)
 		move_in_world();
 	}
 	oamSet(0, player.x, player.y, 3, player.direction, 0, player.animf, 0);
+        scroll_fog();
 }
 void player_state_5(void)
 {
@@ -323,11 +342,11 @@ void player_state_6(void)
 		/* we need to adjust player's position, as this sprite is a few pixels to the left normally... this is why we need 'direction'! */
 		if (player.direction == DIR_LEFT)
 		{
-			oamSet(0, player.x-8, player.y, 3, player.direction, 0, BONK1, 0);
+			oamSet(0, player.x, player.y, 3, player.direction, 0, BONK1, 0);
 			shot.x = player.x - 8;
                         shot.y = player.y + 4;
 		} else {
-			oamSet(0, player.x+8, player.y, 3, player.direction, 0, BONK1, 0);
+			oamSet(0, player.x, player.y, 3, player.direction, 0, BONK1, 0);
 			shot.x = player.x + 8;
 			shot.y = player.y + 4;
 		}
@@ -377,10 +396,11 @@ void shot_state_1(void)
 /* shot state 'fired'. Display sprite and advance until spent. */
         oamSetVisible(4, OBJ_SHOW);
         shot.tics++;
-	if (shot.tics > 4)
+	if (shot.tics > 1)
         {
                 shot.frame++;
                 shot.life++;
+                shot.tics = 0;
                 if (shot.direction == DIR_RIGHT) { 
 			shot.x += shot.speed;
 		} else {
@@ -423,14 +443,19 @@ void play(void) {
         shot.life = 0;
         shot.speed = SHOTSPEED;
 
-	bgInitTileSet(1, &bg1_tiles, &bg1_pal, 0, (&bg1_tiles_end - &bg1_tiles), (&bg1_pal_end-&bg1_pal), BG_16COLORS, 0x4000);
-	bgInitMapSet(1, &bg1_map, (&bg1_map_end - &bg1_map),SC_32x32, 0x01000);
+	bgInitTileSet(1, &bg1_tiles, &bg1_pal, 0, (&bg1_tiles_end - &bg1_tiles), 16*2, BG_16COLORS, 0x4000);
+	bgInitTileSet(0, &fog, &fog_pal, 0, (&fog_end - &fog), 4*2, BG_4COLORS, 0x5000);
 
-	consoleInitText(0, 1, &snesfont);
+	bgInitMapSet(1, &bg1_map, (&bg1_map_end - &bg1_map),SC_64x64, 0x01000);
+	bgInitMapSet(0, &fog_map, (&fog_map_end - &fog_map),SC_32x32, 0x02000);
+
+	consoleInitText(2, 1, &snesfont);
 	consoleSetTextCol(RGB15(11,20,13),RGB15(0,0,0));
-	consoleSetShadowCol(1 ,RGB15(6,10,6));
+	consoleSetShadowCol(2 ,RGB15(6,10,6));
 
-	setMode(BG_MODE1,0);  bgSetDisable(2);
+	setMode(BG_MODE1,0); setScreenOn();
+
+	scroll_fog();
 
 	setBrightness(0);
 	oamInitGfxSet(&sprites, (&sprites_end-&sprites), &sprites_pal, (&sprites_pal_end-&sprites_pal), 0, 0x6000, OBJ_SIZE32);
